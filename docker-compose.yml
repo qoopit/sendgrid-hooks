@@ -1,7 +1,7 @@
 version: '3.5'
 
 services:
-  test-flask-api:
+  sendgrid-hooks-api:
     network_mode: bridge
     build: .
     command: ["flask", "run", "--host=0.0.0.0"]
@@ -15,24 +15,40 @@ services:
       PROFILING: '0'
       PYTHONUNBUFFERED: '1'
       APP_SETTINGS: project.configs.DevelopmentConfig
-      DATABASE_URL: mysql://test-flask:pass@db/test-flask?charset=utf8mb4
+      DATABASE_URL: mysql://sendgrid-hooks:pass@db/sendgrid-hooks?charset=utf8mb4
+      ELASTIC_URL: http://es:9200
     links:
-      - test-flask-mysql:db
+      - sendgrid-hooks-mysql:db
+      - sendgrid-hooks-elastic:es
     depends_on:
-      - test-flask-mysql
+      - sendgrid-hooks-mysql
+      - sendgrid-hooks-elastic
 
-  test-flask-mysql:
+  sendgrid-hooks-mysql:
     image: mariadb
     network_mode: bridge
     restart: always
     environment:
-      MYSQL_DATABASE: 'test-flask'
-      MYSQL_USER: 'test-flask'
+      MYSQL_DATABASE: 'sendgrid-hooks'
+      MYSQL_USER: 'sendgrid-hooks'
       MYSQL_PASSWORD: 'pass'
       MYSQL_ROOT_PASSWORD: 'pass'
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
     ports:
-      - '12223:3306'
+      - '12233:3306'
     volumes:
       - ./mysql-data:/var/lib/mysql
-  
+  sendgrid-hooks-elastic:
+    network_mode: bridge
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
+    environment: 
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    

@@ -4,6 +4,7 @@
 
 ### DATABASE Data ###
 mysql-data/
+es-data/
 
 ### Flask ###
 instance/*

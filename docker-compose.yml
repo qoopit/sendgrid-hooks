@@ -50,5 +50,5 @@ services:
     volumes:
       - ./es-data:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - 49200:9200
     

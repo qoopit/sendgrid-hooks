@@ -6,6 +6,7 @@ class BaseConfig:
     TESTING = False
     DEBUG = True
     ELASTIC_URL = os.environ.get('ELASTIC_URL')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(BaseConfig):
     """ Development configuration """
@@ -26,3 +27,4 @@ class StagingConfig(BaseConfig):
 class ProductionConfig(BaseConfig):
     """ Production configuration """
     DEBUG = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

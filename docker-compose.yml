@@ -15,29 +15,12 @@ services:
       PROFILING: '0'
       PYTHONUNBUFFERED: '1'
       APP_SETTINGS: project.configs.DevelopmentConfig
-      DATABASE_URL: mysql://sendgrid-hooks:pass@db/sendgrid-hooks?charset=utf8mb4
       ELASTIC_URL: http://es:9200
     links:
-      - sendgrid-hooks-mysql:db
       - sendgrid-hooks-elastic:es
     depends_on:
-      - sendgrid-hooks-mysql
       - sendgrid-hooks-elastic
 
-  sendgrid-hooks-mysql:
-    image: mariadb
-    network_mode: bridge
-    restart: always
-    environment:
-      MYSQL_DATABASE: 'sendgrid-hooks'
-      MYSQL_USER: 'sendgrid-hooks'
-      MYSQL_PASSWORD: 'pass'
-      MYSQL_ROOT_PASSWORD: 'pass'
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    ports:
-      - '12233:3306'
-    volumes:
-      - ./mysql-data:/var/lib/mysql
   sendgrid-hooks-elastic:
     network_mode: bridge
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0

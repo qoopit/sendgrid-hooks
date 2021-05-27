@@ -1,0 +1,36 @@
+version: '3.5'
+
+services:
+  sendgrid-hooks-api:
+    network_mode: bridge
+    build: .
+    volumes:
+      - './src:/app'
+    ports:
+      - 12222:5000
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: app.py
+      PROFILING: '0'
+      PYTHONUNBUFFERED: '1'
+      APP_SETTINGS: project.configs.DevelopmentConfig
+      ELASTIC_URL: http://es:9200
+    links:
+      - sendgrid-hooks-elastic:es
+    depends_on:
+      - sendgrid-hooks-elastic
+
+  sendgrid-hooks-elastic:
+    network_mode: bridge
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
+    environment: 
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./es-data:/usr/share/elasticsearch/data
+    ports:
+      - 49200:9200
+    

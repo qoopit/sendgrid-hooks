@@ -33,4 +33,16 @@ services:
       - ./es-data:/usr/share/elasticsearch/data
     ports:
       - 49200:9200
-    
+  sendgrid-hooks-kibana:
+    network_mode: bridge
+    image: docker.elastic.co/kibana/kibana:7.13.0
+    volumes:
+      - ./docker/kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      ELASTICSEARCH_HOSTS: http://es:9200
+    ports:
+      - 45601:5601
+    links:
+      - sendgrid-hooks-elastic:es
+    depends_on:
+      - sendgrid-hooks-elastic

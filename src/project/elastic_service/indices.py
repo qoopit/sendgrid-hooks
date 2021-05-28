@@ -43,6 +43,7 @@ class EventIndex(Index):
         props = {   
             "id": { "type": "integer" },
             "email": { "type": "keyword" },
+            "timestamp": { "type": "date", "format": "epoch_millis"},
         }
 
         return props

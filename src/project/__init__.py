@@ -15,8 +15,10 @@ migrate = Migrate()
 def register_blueprints(app: Flask) -> None:
     from project.heartbeat.endpoints import heartbeat_blueprint
     from project.sendgrid.endpoints import sendgrid_blueprint
+    from project.stats.endpoints import stats_blueprint
     app.register_blueprint(heartbeat_blueprint)
     app.register_blueprint(sendgrid_blueprint)
+    app.register_blueprint(stats_blueprint)
     
 
 def register_error_handlers(app: Flask) -> None:
@@ -70,3 +72,9 @@ def create_app(script_info: str = None) -> Flask:
 
 logging.basicConfig()
 logging.getLogger('sqlalchemy').setLevel(logging.ERROR)
+
+import logging
+es_trace_logger = logging.getLogger('elasticsearch.trace')
+es_trace_logger.setLevel(logging.DEBUG)
+handler = logging.StreamHandler()
+es_trace_logger.addHandler(handler)

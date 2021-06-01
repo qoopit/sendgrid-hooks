@@ -6,6 +6,7 @@ class BaseConfig:
     TESTING = False
     DEBUG = True
     ELASTIC_URL = os.environ.get('ELASTIC_URL')
+    ELASTIC_URL_READ = os.environ.get('ELASTIC_URL_READ')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(BaseConfig):

@@ -16,6 +16,7 @@ services:
       PYTHONUNBUFFERED: '1'
       APP_SETTINGS: project.configs.DevelopmentConfig
       ELASTIC_URL: http://es:9200
+      ELASTIC_URL_READ: http://es.qoopit.io:49200
     links:
       - sendgrid-hooks-elastic:es
     depends_on:
